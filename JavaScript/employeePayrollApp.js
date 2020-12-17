@@ -24,15 +24,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 })
 
+//UC12 local storage
 const save = () => {
     try {
-        let employeeObject = createEmployeePayroll();
+        let employeePayrollData = createEmployeePayroll();
+        createAndUpdateStorage(employeePayrollData);
 
     } catch (e) {
         return;
     }
 }
-
 const createEmployeePayroll = () => {
     let employeePayrollData = new EmployeePayRoll();
     try {
@@ -54,6 +55,20 @@ const createEmployeePayroll = () => {
     employeePayrollData.date = Date.parse(date)
     alert(employeePayrollData.toString())
     return employeePayrollData
+}
+
+
+//UC12 local storage
+const createAndUpdateStorage = (employee) => {
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+    if (employeePayrollList != undefined) {
+        employeePayrollList.push(employee);
+    }
+    else {
+        employeePayrollList = [employee];
+    }
+    alert(employeePayrollList.toString());
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
 
 const getSelectedValues = (propertyValue) => {
