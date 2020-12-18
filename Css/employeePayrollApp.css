@@ -170,7 +170,27 @@ select {
   text-align: center;
 }
 
+@media only screen and (max-width: 1024px) {
+  .profile-radio-content,
+  .gender-content {
+    flex-flow: wrap;
+    justify-content: space-between;
+  }
+
+  .form {
+    width: 100%;
+    margin: 0;
+    margin-top: 15px;
+  }
+  .button {
+    min-width: 158px;
+  }
+}
+
 @media only screen and (max-width: 960px) {
+  .form {
+    width: 100%;
+  }
   .cancelButton {
     margin-left: 0px;
   }
@@ -178,43 +198,106 @@ select {
     width: 85%;
     padding: 44px 20px;
   }
+
+  .profile-radio-content {
+    flex-wrap: wrap;
+    width: 55%;
+  }
 }
-@media all and (min-device-width: 320px) and (max-device-width: 960px) {
-  .row {
+
+@media only screen and (max-width: 640px) {
+  .form {
+    margin-top: 5px;
+    width: 100%;
+  }
+  .row-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .profile-radio-content {
+    width: 80%;
+  }
+  img {
+    width: 40px;
+  }
+  .gender-content {
+    flex-flow: unset;
+  }
+  .checkbox-content {
+    width: 100%;
+  }
+  label {
+    flex-flow: row;
+  }
+  select {
+    width: 120px;
+    margin: 5px;
+  }
+  .select-content {
+    display: flex;
     flex-direction: column;
   }
-  .uploadButton {
-    justify-content: flex-start;
-    font-size: 3em;
+}
+
+@media only screen and (max-width: 420px) {
+  .form-head {
+    font-size: 1.2em;
   }
-  .profile-radio-button {
-    flex-flow: wrap;
+  .button {
+    min-width: 150px;
   }
   .submit-reset {
-    flex-direction: column-reverse;
-    align-items: flex-start;
-    margin: 5px;
-    min-width: 70px;
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row-reverse;
+    justify-content: space-around;
   }
-  .submitButton {
-    margin: 5px;
-    border-radius: 12px;
-    min-width: 70px;
-  }
+
   .buttonParent {
-    align-items: flex-start;
-    margin: 5px;
-    border-radius: 12px;
-    min-width: 70px;
+    flex-direction: column-reverse;
+    align-items: flex-starta;
   }
-  .cancelButton {
-    margin: 5px;
-    border-radius: 12px;
-    min-width: 70px;
-  }
+  .submitButton,
   .resetButton {
-    margin: 5px;
-    border-radius: 12px;
+    margin: inherit;
+  }
+  .checkbox-content {
+    flex-flow: wrap;
+  }
+}
+
+@media only screen and (max-width: 220px) {
+  .form {
+    margin-top: 5px;
+    width: 100%;
+  }
+  .form-head {
+    font-size: 1.2em;
+  }
+  .button {
+    min-width: 80px;
+  }
+  .submitButton,
+  .resetButton {
+    min-width: 95px;
+  }
+  .profile-radio-content,
+  .gender-content,
+  .checkbox-content {
+    flex-flow: wrap;
+  }
+  .profile {
+    width: 40px;
+    margin: 0;
+  }
+  .checkbox-content {
+    width: 50%;
+  }
+  .profile-radio-content {
+    width: 100%;
+  }
+  label {
     min-width: 70px;
   }
 }
