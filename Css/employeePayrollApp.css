@@ -209,34 +209,43 @@ select {
     padding: 44px 20px;
   }
 }
-
-@media only screen and (max-width: 600px) {
-  .form {
-    margin-top: 10px;
-  }
+@media all and (min-device-width: 320px) and (max-device-width: 960px) {
   .row {
     flex-direction: column;
   }
   .uploadButton {
     justify-content: flex-start;
+    font-size: 3em;
   }
   .profile-radio-button {
     flex-flow: wrap;
   }
   .submit-reset {
-    width: 100%;
-    display: flex;
-    flex-grow: 1;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .submitButton {
-    margin: 0;
-  }
-  .buttonParent {
     flex-direction: column-reverse;
     align-items: flex-start;
+    margin: 5px;
+    min-width: 70px;
+  }
+  .submitButton {
+    margin: 5px;
+    border-radius: 12px;
+    min-width: 70px;
+  }
+  .buttonParent {
+    align-items: flex-start;
+    margin: 5px;
+    border-radius: 12px;
+    min-width: 70px;
+  }
+  .cancelButton {
+    margin: 5px;
+    border-radius: 12px;
+    min-width: 70px;
+  }
+  .resetButton {
+    margin: 5px;
+    border-radius: 12px;
+    min-width: 70px;
   }
 }
 
