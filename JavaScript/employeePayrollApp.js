@@ -74,10 +74,6 @@ const createEmployeePayroll = () => {
         setTextValue('.text-error', e);
         throw e;
     }
-
-
-
-
     employeePayrollData.id = getSelectedValues('[name =id]')
     employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop()
     employeePayrollData.gender = getSelectedValues('[name=gender]').pop()
@@ -87,7 +83,6 @@ const createEmployeePayroll = () => {
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
         getInputValueById('#year')
     employeePayrollData.date = date
-    alert(employeePayrollData.date + date)
     alert(employeePayrollData.toString())
     return employeePayrollData
 }
@@ -103,7 +98,7 @@ const createAndUpdateStorage = (employee) => {
         employeePayrollList = [employee];
     }
     alert(JSON.stringify(employeePayrollList))
-    alert(employeePayrollList.toString());
+    // alert(employeePayrollList.toString());
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
 
