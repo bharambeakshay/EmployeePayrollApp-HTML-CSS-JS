@@ -102,6 +102,7 @@ const createAndUpdateStorage = (employee) => {
     else {
         employeePayrollList = [employee];
     }
+    alert(JSON.stringify(employeePayrollList))
     alert(employeePayrollList.toString());
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
