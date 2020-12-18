@@ -22,6 +22,37 @@ window.addEventListener('DOMContentLoaded', (event) => {
     salary.addEventListener('input', function () {
         output.textContent = salary.value
     });
+
+    const year = document.getElementById('year')
+    const month = document.getElementById('month')
+    const day = document.getElementById('day')
+    const dateError = document.querySelector('.date-error')
+    year.addEventListener('change', function () {
+        try {
+            dateValidation()
+        } catch (e) { dateError.textContent = e }
+    });
+    month.addEventListener('change', function () {
+        try {
+            dateValidation()
+        } catch (e) { dateError.textContent = e }
+    });
+    day.addEventListener('change', function () {
+        try {
+            dateValidation()
+        } catch (e) { dateError.textContent = e }
+    });
+    function dateValidation() {
+        let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
+            getInputValueById('#year')
+        let newDate = Date.parse(date)
+        let currDate = new Date()
+        let miliDate = Date.parse(currDate) - 2592000000
+        if (newDate < miliDate) {
+            dateError.textContent = ""
+            return
+        } else throw 'Incorrect Date'
+    }
 })
 
 //UC12 local storage
@@ -44,6 +75,9 @@ const createEmployeePayroll = () => {
         throw e;
     }
 
+
+
+
     employeePayrollData.id = getSelectedValues('[name =id]')
     employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop()
     employeePayrollData.gender = getSelectedValues('[name=gender]').pop()
@@ -52,7 +86,8 @@ const createEmployeePayroll = () => {
     employeePayrollData.note = getInputValueById('#notes')
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
         getInputValueById('#year')
-    employeePayrollData.date = Date.parse(date)
+    employeePayrollData.date = date
+    alert(employeePayrollData.date + date)
     alert(employeePayrollData.toString())
     return employeePayrollData
 }
