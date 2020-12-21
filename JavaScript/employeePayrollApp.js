@@ -1,7 +1,5 @@
-
-//UC10 validations for Name and Date
-// UC11 Ability to create Emp payrollObject
-
+// //UC10 validations for Name and Date
+// // UC11 Ability to create Emp payrollObject
 window.addEventListener('DOMContentLoaded', (event) => {
     const name = document.querySelector("#name")
     const textError = document.querySelector('.text-error')
@@ -15,14 +13,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
             textError.textContent = ""
         } catch (e) { textError.textContent = e }
     });
-    //UC8
+
     const salary = document.querySelector('#salary');
     const output = document.querySelector('.salary-output');
     output.textContent = salary.value;
     salary.addEventListener('input', function () {
         output.textContent = salary.value
     });
-
     const year = document.getElementById('year')
     const month = document.getElementById('month')
     const day = document.getElementById('day')
@@ -56,25 +53,32 @@ window.addEventListener('DOMContentLoaded', (event) => {
 })
 
 //UC12 local storage
-const save = () => {
-    try {
-        let employeePayrollData = createEmployeePayroll();
-        createAndUpdateStorage(employeePayrollData);
 
-    } catch (e) {
-        return;
-    }
-}
-const createEmployeePayroll = () => {
-    let employeePayrollData = new EmployeePayRoll();
+function save() {
     try {
-        employeePayrollData.name = getInputValueById('#name');
+        let employeePayrollData = createEmpPayroll();
+        createAndUpdateStorage(employeePayrollData)
+    } catch (e) { return }
+}
+
+function createAndUpdateStorage(empPayrollData) {
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"))
+    if (employeePayrollList != undefined) {
+        employeePayrollList.push(empPayrollData)
+    } else {
+        employeePayrollList = [empPayrollData]
     }
-    catch (e) {
-        setTextValue('.text-error', e);
-        throw e;
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList))
+}
+
+function createEmpPayroll() {
+    let employeePayrollData = new EmployeePayRoll()
+    try {
+        employeePayrollData.name = getInputValueById('#name')
+    } catch (e) {
+        setTextValue('.text-error', e)
+        throw e
     }
-    employeePayrollData.id = getSelectedValues('[name =id]')
     employeePayrollData.profilePic = getSelectedValues('[name=profile]').pop()
     employeePayrollData.gender = getSelectedValues('[name=gender]').pop()
     employeePayrollData.department = getSelectedValues('[name=department]')
@@ -83,43 +87,23 @@ const createEmployeePayroll = () => {
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
         getInputValueById('#year')
     employeePayrollData.date = date
-    alert(employeePayrollData.toString())
+    employeePayrollData.id = Date.parse(new Date());
+    alert(employeePayrollData.toString());
     return employeePayrollData
 }
 
-
-//UC12 local storage
-const createAndUpdateStorage = (employee) => {
-    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
-    if (employeePayrollList != undefined) {
-        employeePayrollList.push(employee);
-    }
-    else {
-        employeePayrollList = [employee];
-    }
-    alert(JSON.stringify(employeePayrollList))
-    // alert(employeePayrollList.toString());
-    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
-}
-
-const getSelectedValues = (propertyValue) => {
-    let allItems = document.querySelectorAll(propertyValue);
-    let setItems = [];
+function getSelectedValues(propValue) {
+    let allItems = document.querySelectorAll(propValue)
+    let selItems = []
     allItems.forEach(item => {
-        if (item.checked)
-            setItems.push(item.value);
+        if (item.checked) selItems.push(item.value)
     });
-    return setItems;
+    return selItems
 }
 
-const getInputElementValue = (id) => {
-    let value = document.querySelector(id).value;
-    return value;
-}
-
-const getInputValueById = (id) => {
-    let value = document.querySelector(id).value;
-    return value;
+function getInputValueById(id) {
+    let value = document.querySelector(id).value
+    return value
 }
 
 //UC13 Reset values
