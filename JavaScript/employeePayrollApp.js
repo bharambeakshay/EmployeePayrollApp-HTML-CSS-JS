@@ -2,66 +2,53 @@
 // // UC11 Ability to create Emp payrollObject
 let isUpdate = false;
 let employeePayrollObj = {};
+
+
 window.addEventListener('DOMContentLoaded', (event) => {
-    checkForUpdate();
-    const name = document.querySelector("#name")
-    const textError = document.querySelector('.text-error')
+    const name = document.querySelector('#name');
     name.addEventListener('input', function () {
         if (name.value.length == 0) {
-            textError.textContent = ""
-            return
+            setTextValue('.text-error', " ");
+            return;
         }
         try {
-            (new EmployeePayRoll).name = name.value
-            textError.textContent = ""
-        } catch (e) { textError.textContent = e }
+            (new EmployeePayRoll()).name = name.value;
+            setTextValue('.text-error', "");
+        } catch (e) {
+            setTextValue('.text-error', e);
+        }
+    });
+
+    const date = document.querySelector('#date');
+    date.addEventListener('input', function () {
+        const startDate = new Date(Date.parse(getInputValueById('#day') + " " +
+            getInputValueById('#month') + " " +
+            getInputValueById('#year')));
+        try {
+            (new EmployeePayRoll()).startDate = startDate;
+            setTextValue('.date-error', "");
+        } catch (e) {
+            setTextValue('.date-error', e);
+        }
     });
 
     const salary = document.querySelector('#salary');
-    const output = document.querySelector('.salary-output');
-    output.textContent = salary.value;
+    setTextValue('.salary-output', salary.value);
+    // output.textContent = salary.value;
     salary.addEventListener('input', function () {
-        output.textContent = salary.value
+        setTextValue('.salary-output', salary.value);
     });
-    const year = document.getElementById('year')
-    const month = document.getElementById('month')
-    const day = document.getElementById('day')
-    const dateError = document.querySelector('.date-error')
-    year.addEventListener('change', function () {
-        try {
-            dateValidation()
-        } catch (e) { dateError.textContent = e }
-    });
-    month.addEventListener('change', function () {
-        try {
-            dateValidation()
-        } catch (e) { dateError.textContent = e }
-    });
-    day.addEventListener('change', function () {
-        try {
-            dateValidation()
-        } catch (e) { dateError.textContent = e }
-    });
-    function dateValidation() {
-        let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
-            getInputValueById('#year')
-        let newDate = Date.parse(date)
-        let currDate = new Date()
-        let miliDate = Date.parse(currDate) - 2592000000
-        if (newDate < miliDate) {
-            dateError.textContent = ""
-            return
-        } else throw 'Incorrect Date'
-    }
     checkForUpdate();
-})
+});
 
 //UC12 local storage
 
-const save = () => {
+const save = (event) => {
+   
     try {
         let employeePayrollData = createEmpPayroll();
         createAndUpdateStorage(employeePayrollData)
+      
     } catch (e) { return }
 }
 
@@ -90,7 +77,7 @@ const createEmpPayroll = () => {
     employeePayrollData.note = getInputValueById('#notes')
     let date = getInputValueById('#day') + " " + getInputValueById('#month') + " " +
         getInputValueById('#year')
-    employeePayrollData.date = date
+    employeePayrollData.startDate = date
     employeePayrollData.id = Date.parse(new Date());
     alert(employeePayrollData.toString());
     return employeePayrollData
@@ -182,4 +169,16 @@ const checkForUpdate = () => {
     if (!isUpdate) return;
     employeePayrollObj = JSON.parse(employeePayrollJson);
     setForm();
+}
+
+const setEmployeePayrollObject = () => {
+    employeePayrollObj._name = getInputValueById('#name');
+    employeePayrollObj._profilePic = getInputValueByValues('[name=profile]').pop();
+    employeePayrollObj._gender = getInputValueByValues('[name=gender]').pop();
+    employeePayrollObj._department = getInputValueByValues('[name=department]');
+    employeePayrollObj._salary = getInputValueById('#salary');
+    employeePayrollObj._name = getInputValueById('#name');
+    employeePayrollObj._note = getInputValueById('#notes');
+    let date = getInputValueById('#day') + " " + getInputValueById('#month') + "  " + getInputValueById('year');
+    employeePayrollObj._startDate = date;
 }
