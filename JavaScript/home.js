@@ -2,39 +2,37 @@
 let empPayrollList = [];
 // Adding a Document Object Model content loader with add event listener
 window.addEventListener("DOMContentLoaded", (event) => {
-    /// Calling the get employee payroll data from storage method to populate the empPayrollList
+    // Calling the get employee payroll data from storage method to populate the empPayrollList
     empPayrollList = getEmployeePayrollDataFromStorage();
-    /// Selecting the emp-count class element to update the previously used static count of elements
+    // Selecting the emp-count class element to update the previously used static count of elements
     let element = document.querySelector(".emp-count");
     if (element) {
         element.textContent = empPayrollList.length;
     }
-    /// Calling the inner HTML method to initialise a header template and then bind it with the table
+    // Calling the inner HTML method to initialise a header template and then bind it with the table
     createInnerHtml();
-    /// Removing data from the emp edit
+    // Removing data from the emp edit
     localStorage.removeItem("editEmp");
 });
 
 
 const createInnerHtml = () => {
-    /// If the employee payroll list is empty i.e. no data stored in the local storage then return from the method
+    // If the employee payroll list is empty i.e. no data stored in the local storage then return from the method
     if (empPayrollList.length == 0) return;
-    /// Defining the common header html tags for the table to be displayed at the page
+    // Defining the common header html tags for the table to be displayed at the page
     const headerHtml =
         "<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th><th>Start Date</th><th>Actions</th>";
-    /// Defining the inner html tag in which all the elements will be appended to populate the table
+    // Defining the inner html tag in which all the elements will be appended to populate the table
     let innerHtml = `${headerHtml}`;
-    /// Iterating over the list of elemen ts in employee payroll list
-    /// Continuously appending each row structure of html page to the innerHtml tag using placeholder, template literals
+    // Iterating over the list of elemen ts in employee payroll list
+    // Continuously appending each row structure of html page to the innerHtml tag using placeholder, template literals
     for (const empPayrollData of empPayrollList) {
         innerHtml = `${innerHtml}
     <tr>
-          <td><img class="profile" alt="" src="${empPayrollData._profilePic
-            }"></td>
+          <td><img class="profile" alt="" src="${empPayrollData._profilePic}"></td>
           <td>${empPayrollData._name}</td>
           <td>${empPayrollData._gender}</td>
-          <td>${getDeptHtml(empPayrollData._department)}
-          </td>
+          <td>${getDeptHtml(empPayrollData._department)}</td>
           <td>${empPayrollData._salary}</td>
           <td>${stringifyDate(empPayrollData._startDate)}</td>
           <td>
@@ -43,8 +41,8 @@ const createInnerHtml = () => {
           </td>
     </tr>`;
     }
-    /// Manipulating the inner Html content of the table display with the assigned value
-    /// Still the page is static and has to be made dynamic in subsequent stages
+    // Manipulating the inner Html content of the table display with the assigned value
+    // Still the page is static and has to be made dynamic in subsequent stages
     document.querySelector("#display").innerHTML = innerHtml;
 };
 
@@ -61,7 +59,7 @@ const getEmployeePayrollDataFromStorage = () => {
  * @param {*} deptList 
  */
 const getDeptHtml = (deptList) => {
-    let deptHtml = " ";
+    let deptHtml = '';
     for (const dept of deptList) {
         deptHtml = `${deptHtml}<div class="dept-label">${dept}</div>`;
     }
