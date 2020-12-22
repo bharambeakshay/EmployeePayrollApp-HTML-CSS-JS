@@ -7,12 +7,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     localStorage.removeItem('editEmp')
 })
 
-function getEmpPayrollDataFromStorage() {
+const getEmpPayrollDataFromStorage = () => {
     return localStorage.getItem('EmployeePayrollList') ?
         JSON.parse(localStorage.getItem('EmployeePayrollList')) : []
 }
 
-function createInnerHtml() {
+const createInnerHtml = () => {
     if (empPayrollList.length == 0) return;
     const headerHtml = `<tr><th></th><th>Name</th><th>Gender</th><th>Department</th>
         <th>Salary</th><th>start Date</th><th>Actions</th></tr>`
@@ -35,7 +35,7 @@ function createInnerHtml() {
     }
     document.querySelector('#display').innerHTML = innerHtml
 }
-function getDeptHtml(deptList) {
+const getDeptHtml = (deptList) => {
     let deptHtml = ''
     for (const dept of deptList) {
         deptHtml = `${deptHtml} <div class='dept-label'>${dept}</div>`
@@ -43,7 +43,7 @@ function getDeptHtml(deptList) {
     return deptHtml
 }
 
-function remove(node) {
+const remove = (node) => {
     let empPayrollData = empPayrollList.find(empData => empData._id == node.id)
     if (!empPayrollData) return;
     let index = empPayrollList.map(empData => empData._id).indexOf(empPayrollData._id);

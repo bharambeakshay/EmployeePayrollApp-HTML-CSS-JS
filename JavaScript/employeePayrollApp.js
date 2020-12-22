@@ -54,14 +54,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 //UC12 local storage
 
-function save() {
+const save = () => {
     try {
         let employeePayrollData = createEmpPayroll();
         createAndUpdateStorage(employeePayrollData)
     } catch (e) { return }
 }
 
-function createAndUpdateStorage(empPayrollData) {
+const createAndUpdateStorage = (empPayrollData) => {
     let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"))
     if (employeePayrollList != undefined) {
         employeePayrollList.push(empPayrollData)
@@ -71,7 +71,7 @@ function createAndUpdateStorage(empPayrollData) {
     localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList))
 }
 
-function createEmpPayroll() {
+const createEmpPayroll = () => {
     let employeePayrollData = new EmployeePayRoll()
     try {
         employeePayrollData.name = getInputValueById('#name')
@@ -92,7 +92,7 @@ function createEmpPayroll() {
     return employeePayrollData
 }
 
-function getSelectedValues(propValue) {
+const getSelectedValues = (propValue) => {
     let allItems = document.querySelectorAll(propValue)
     let selItems = []
     allItems.forEach(item => {
@@ -101,7 +101,7 @@ function getSelectedValues(propValue) {
     return selItems
 }
 
-function getInputValueById(id) {
+const getInputValueById = (id) => {
     let value = document.querySelector(id).value
     return value
 }
