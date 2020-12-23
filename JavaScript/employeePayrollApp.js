@@ -43,7 +43,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
             setTextValue('.date-error', e);
         }
     });
-    
+
     // Check for update request is passed or not by the user
     // if request is passed then execute the request of the user by populating the data to be updated in the form
     checkForUpdate();
@@ -115,11 +115,7 @@ const createAndUpdateStorage = () => {
                 .map((empData) => empData._id)
                 .indexOf(empPayrollData._id);
             // Removing the element from the list once update request is passed
-            employeePayrollList.splice(
-                index,
-                1,
-                createEmployeePayrollData(empPayrollData._id)
-            );
+            employeePayrollList.splice(index, 1, createEmployeePayrollData(empPayrollData._id));
         }
     } else {
         employeePayrollList = [createEmployeePayrollData()];
@@ -127,10 +123,7 @@ const createAndUpdateStorage = () => {
     // Displaying the alert popup for the user one more time before the local storage has been populated
     alert(employeePayrollList.toString());
     // Push the data to the local storage
-    localStorage.setItem(
-        "EmployeePayrollList",
-        JSON.stringify(employeePayrollList)
-    );
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(employeePayrollList));
 }
 
 /**
@@ -169,7 +162,7 @@ const setEmployeePayrollData = (employeePayrollData) => {
         setTextValue(".date-error", e);
         throw e;
     }
-    alert(employeePayrollData.toString());
+
 };
 
 const createNewEmployeeId = () => {
@@ -271,14 +264,14 @@ const setValue = (id, value) => {
  * Method defined to check for the update request
  */
 const checkForUpdate = () => {
-    /// Getting the data stored with the edit temp key
+    // Getting the data stored with the edit temp key
     const employeePayrollJson = localStorage.getItem("editEmp");
-    /// If the user has requested for the update then allowing the parsing process of the new data list
-    /// The data to be edit was added to the local storage using editEmp as the key
+    // If the user has requested for the update then allowing the parsing process of the new data list
+    // The data to be edit was added to the local storage using editEmp as the key
     isUpdate = employeePayrollJson ? true : false;
     if (!isUpdate) return;
     employeePayrollObj = JSON.parse(employeePayrollJson);
-    /// Invoking the set form method to enter the previously present data to easify the User experience
+    // Invoking the set form method to enter the previously present data to easify the User experience
     setForm();
 };
 
