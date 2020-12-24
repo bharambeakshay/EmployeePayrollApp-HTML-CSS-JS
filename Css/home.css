@@ -109,6 +109,7 @@ body {
   margin: 0 auto;
   overflow: auto;
   overflow-x: auto;
+  overflow-y: scroll;
 }
 
 .table {
