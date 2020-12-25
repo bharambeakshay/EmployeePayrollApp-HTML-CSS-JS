@@ -61,23 +61,50 @@ const save = (event) => {
     event.stopPropagation();
     try {
         setEmployeePayrollObject();
-        createAndUpdateStorage();
-        resetForm();
-        // Once the data is save moving to the home page to see the data directly
-        // Note that this does not mean our home button is redundant
-        window.location.replace(site_properties.home_page);
-    }
-    catch (e) {
+        if (site_properties.use_local_storage.match("true")) {
+            createAndUpdateStorage();
+            resetForm();
+            // Once the data is save moving to the home page to see the data directly
+            // Note that this does not mean our home button is redundant
+            window.location.replace(site_properties.home_page);
+        } else {
+            createOrUpdateEmployeePayroll();
+        }
+    } catch (e) {
         /// Logging the error message if any
-        alert(e);
+        // alert(e);
         return;
     }
 };
+
+
+const createOrUpdateEmployeePayroll = () => {
+    let postURL = site_properties.server_url;
+    let methodCall = "POST";
+    if (isUpdate) {
+        methodCall = "PUT";
+        postURL = postURL + employeePayrollObj.id.toString();
+    }
+    makeServiceCall(methodCall, postURL, true, employeePayrollObj)
+        .then(responseText => {
+            resetForm();
+            window.location.replace(site_properties.home_page);
+        })
+        .catch(error => {
+            throw error;
+        });
+}
+
+
+
 
 /**
  * Now we are not working on local instance as we had the requirement of data to be pre-declared
  */
 const setEmployeePayrollObject = () => {
+    if (!isUpdate && site_properties.use_local_storage.match("true")) {
+        employeePayrollObj.id = createNewEmployeeId();
+    }
     employeePayrollObj._name = getInputValueById("#name");
     employeePayrollObj._profilePic = getSelectedValues("[name=profile]").pop();
     employeePayrollObj._gender = getSelectedValues("[name=gender]").pop();
@@ -98,13 +125,11 @@ const setEmployeePayrollObject = () => {
  * @param : { }
 */
 const createAndUpdateStorage = () => {
-    let employeePayrollList = JSON.parse(
-        localStorage.getItem("EmployeePayrollList")
-    );
+    let employeePayrollList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
     // If the employeePayrollData list is not empty i.e. already created then push the incoming data onto the local storage
     if (employeePayrollList) {
         let empPayrollData = employeePayrollList.find(
-            (empData) => empData._id == employeePayrollObj._id
+            (empData) => empData._id == employeePayrollObj.id
         );
         if (!empPayrollData) {
             employeePayrollList.push(createEmployeePayrollData());

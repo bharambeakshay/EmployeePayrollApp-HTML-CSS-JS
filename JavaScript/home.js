@@ -1,18 +1,9 @@
 // Creating a global employee payroll list-array which will contain objects read from local storage
-let empPayrollList = [];
-// Adding a Document Object Model content loader with add event listener
-window.addEventListener("DOMContentLoaded", (event) => {
-    // Calling the get employee payroll data from storage method to populate the empPayrollList
-    empPayrollList = getEmployeePayrollDataFromStorage();
-    // Selecting the emp-count class element to update the previously used static count of elements
-    let element = document.querySelector(".emp-count");
-    if (element) {
-        element.textContent = empPayrollList.length;
-    }
-    // Calling the inner HTML method to initialise a header template and then bind it with the table
-    createInnerHtml();
-    // Removing data from the emp edit
-    localStorage.removeItem("editEmp");
+let empPayrollList;
+window.addEventListener('DOMContentLoaded', (event) => {
+    if (site_properties.use_local_storage.match("true")) {
+        getEmployeePayrollDataFromStorage();
+    } else getEmployeePayrollDataFromServer();
 });
 
 
@@ -36,8 +27,8 @@ const createInnerHtml = () => {
           <td>${empPayrollData._salary}</td>
           <td>${stringifyDate(empPayrollData._startDate)}</td>
           <td>
-            <img id="${empPayrollData._id}" onclick="remove(this)" alt="delete" width="30px" src="../Assets/icons/delete-black-18dp.svg">
-            <img id="${empPayrollData._id}" onclick="update(this)" alt="edit" width="30px" src="../Assets/icons/create-black-18dp.svg">
+            <img id="${empPayrollData.id}" onclick="remove(this)" alt="delete" width="30px" src="../Assets/icons/delete-black-18dp.svg">
+            <img id="${empPayrollData.id}" onclick="update(this)" alt="edit" width="30px" src="../Assets/icons/create-black-18dp.svg">
           </td>
     </tr>`;
     }
@@ -46,12 +37,31 @@ const createInnerHtml = () => {
     document.querySelector("#display").innerHTML = innerHtml;
 };
 
-
 const getEmployeePayrollDataFromStorage = () => {
-    return localStorage.getItem("EmployeePayrollList")
-        ? JSON.parse(localStorage.getItem("EmployeePayrollList"))
-        : [];
-};
+    empPayrollList = localStorage.getItem('EmployeePayrollList') ? JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+    processEmployeePayrollDataResponse();
+}
+
+const processEmployeePayrollDataResponse = () => {
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+    createInnerHtml();
+    localStorage.removeItem('editEmp');
+}
+
+const getEmployeePayrollDataFromServer = () => {
+    makeServiceCall("GET", site_properties.server_url, true)
+        .then(responseText => {
+            empPayrollList = JSON.parse(responseText);
+            processEmployeePayrollDataResponse();
+        })
+        .catch(error => {
+            console.log("GET Error Status: " + JSON.stringify(error));
+            empPayrollList = [];
+            processEmployeePayrollDataResponse();
+        });
+}
+
+
 
 
 /**
@@ -70,23 +80,52 @@ const getDeptHtml = (deptList) => {
  *  to delete the row of employee
  * @param {*} node 
  */
+// const remove = (node) => {
+//     let empPayrollData = empPayrollList.find(empData => empData._id == node.id)
+//     if (!empPayrollData) return;
+//     let index = empPayrollList.map(empData => empData._id).indexOf(empPayrollData._id);
+//     empPayrollList.splice(index, 1);
+//     localStorage.setItem("EmployeePayrollList", JSON.stringify(empPayrollList));
+//     document.querySelector(".emp-count").textContent = empPayrollList.length;
+//     createInnerHtml();
+//     window.location.reload();
+// }
+
+
 const remove = (node) => {
-    let empPayrollData = empPayrollList.find(empData => empData._id == node.id)
-    if (!empPayrollData) return;
-    let index = empPayrollList.map(empData => empData._id).indexOf(empPayrollData._id);
+    let employeePayrollData = empPayrollList.find(empData => empData.id == node.id);
+    //alert(JSON.stringify(empPayrollList))
+    //  alert(employeePayrollData)
+    if (!employeePayrollData) return;
+    // alert("hie" + employeePayrollData)
+    const index = empPayrollList.map(empData => empData.id).indexOf(employeePayrollData.id);
+    //alert(index)
     empPayrollList.splice(index, 1);
-    localStorage.setItem("EmployeePayrollList", JSON.stringify(empPayrollList));
-    document.querySelector(".emp-count").textContent = empPayrollList.length;
-    createInnerHtml();
-    window.location.reload();
+    if (site_properties.use_local_storage.match("true")) {
+        localStorage.setItem("EmployeePayrollList", JSON.stringify(empPayrollList));
+        document.querySelector(".emp-count").textContent = empPayrollList.length;
+        createInnerHtml();
+    } else {
+        const deleteURL = site_properties.server_url + employeePayrollData.id.toString();
+        makeServiceCall("DELETE", deleteURL, false)
+            .then(responseText => {
+                createInnerHtml();
+            })
+            .catch(error => {
+                console.log("DELETE Error Status: " + JSON.stringify(error));
+            });
+    }
 }
+
+
+
 
 /**
  * to update the row of employee
  * @param {*} node 
  */
 const update = (node) => {
-    let empPayrollData = empPayrollList.find((empData) => empData._id == node.id);
+    let empPayrollData = empPayrollList.find((empData) => empData.id == node.id);
     if (!empPayrollData) return;
     localStorage.setItem("editEmp", JSON.stringify(empPayrollData));
     window.location.replace(site_properties.add_emp_payroll_page);
